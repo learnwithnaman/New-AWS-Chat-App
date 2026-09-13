@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chat-client
+  namespace: chat-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: chat-client
+  template:
+    metadata:
+      labels:
+        app: chat-client
+    spec:
+      containers:
+      - name: chat-client
+        image: 040494736757.dkr.ecr.us-east-2.amazonaws.com/chat-client:latest
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chat-client
+  namespace: chat-app
+spec:
+  selector:
+    app: chat-client
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: NodePort
